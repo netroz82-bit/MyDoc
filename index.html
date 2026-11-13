@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>دکتر من | MyDoc</title>
+<style>
+:root{--bg:#eef6ff;--c:#fff;--t:#17324d;--m:#6b829a;--p:#2f80ed;--l:#d9e9fc;--r:#e5484d;--g:#22b573}
+body.dark{--bg:#0e1621;--c:#172232;--t:#e4edf8;--m:#8aa0b8;--l:#2a3b52}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--t);font:15px/1.6 Tahoma,system-ui,sans-serif}
+header{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:8px;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:var(--p);color:#fff}
+header h1{flex:1;margin:0;font-size:18px}header small{opacity:.8;font-size:12px}
+header button{background:#fff3;border:0;color:#fff;width:38px;height:38px;border-radius:10px;font-size:18px}
+main{padding:12px;max-width:560px;margin:auto;padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
+.card{background:var(--c);border-radius:16px;padding:14px;margin-bottom:12px;border:1px solid var(--l)}
+h3{margin:0 0 10px;font-size:15px;color:var(--p)}
+.f{margin-bottom:12px}label{display:block;font-size:13px;color:var(--m);margin-bottom:4px}
+input,select,.ddb{width:100%;height:44px;border:1px solid var(--l);border-radius:12px;background:var(--bg);color:var(--t);padding:0 12px;font:inherit;text-align:start}
+input:focus,select:focus{outline:2px solid var(--p)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row .f{margin-bottom:12px}
+textarea{width:100%;border:1px solid var(--l);border-radius:12px;background:var(--bg);color:var(--t);padding:10px 12px;font:inherit;resize:vertical}
+textarea:focus{outline:2px solid var(--p)}
+.seg{display:flex;gap:6px}.seg button{flex:1;height:44px;border:1px solid var(--l);border-radius:12px;background:var(--bg);color:var(--t);font:inherit}
+.seg button.on{background:var(--p);color:#fff;border-color:var(--p)}
+.dd{position:relative}.ddb{cursor:pointer;color:var(--m)}
+.ddp{position:absolute;inset-inline:0;top:48px;z-index:20;background:var(--c);border:1px solid var(--p);border-radius:12px;padding:8px;box-shadow:0 8px 24px #0003}
+.ddp input{height:38px;margin-bottom:6px}.ddl{max-height:230px;overflow:auto}
+.it{padding:9px 10px;border-radius:8px}.it:active{background:var(--l)}
+.sr{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px dashed var(--l)}
+.sr span{flex:1}.sr b{color:var(--p);font-weight:600}
+.sr button{width:30px;height:30px;border:0;border-radius:50%;background:var(--r);color:#fff;font-size:20px;line-height:1}
+.emp{color:var(--m);padding:6px 0}
+.b{width:100%;height:48px;border:0;border-radius:12px;background:var(--p);color:#fff;font:inherit;font-weight:600;margin-top:12px}
+.b.s{background:var(--l);color:var(--t)}.b:disabled{opacity:.6}
+.dot{width:12px;height:12px;border-radius:50%;background:#9aa;display:inline-block;flex:none;box-shadow:0 0 0 2px #fff6}
+.dot.ok{background:var(--g);box-shadow:0 0 8px var(--g)}.dot.bad{background:var(--r)}.dot.wait{background:#f5b301}
+.stl{display:flex;align-items:center;gap:8px;margin-top:12px}
+#toast{position:fixed;inset-inline:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));background:#17324d;color:#fff;padding:12px;border-radius:12px;text-align:center;opacity:0;pointer-events:none;transition:.25s;z-index:99}
+#toast.show{opacity:1}
+.sheet{background-color:#fff;background-image:repeating-linear-gradient(to bottom,transparent 0 31px,#4a90e2 31px 32px);color:#10243a;padding:0 16px 32px;border-radius:6px;box-shadow:0 2px 12px #0003;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sheet>div{line-height:32px;font-size:14px}.sheet .ind{padding-inline-start:20px;color:#3b4f66}
+.rh{display:flex;justify-content:space-between;font-size:18px;color:#1f5fbf}.rx{font-size:24px!important;color:#1f5fbf}
+.ft{font-size:11px!important;color:#6b829a}
+.r3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.r3 .b{font-size:13px;padding:0 4px}
+@media print{header,.noprint,#home,#set,#toast{display:none!important}body{background:#fff}main{padding:0;max-width:none}.sheet{box-shadow:none}@page{margin:10mm}}
+</style></head><body>
+<header><span class="dot" id="hd"></span><h1 id="ttl">🩺 دکتر من <small>MyDoc</small></h1><button onclick="newP()" title="بیمار جدید">＋</button><button onclick="go('set')" title="تنظیمات">⚙</button></header>
+<main>
+<section id="home" class="pg">
+<div class="card">
+<div class="f"><label>نام بیمار</label><input id="name" oninput="render()"></div>
+<div class="row"><div class="f"><label>سن (سال)</label><input id="age" type="number" inputmode="numeric" oninput="render()"></div>
+<div class="f"><label>جنسیت</label><div class="seg" id="sex"><button type="button">مرد</button><button type="button">زن</button></div></div></div>
+<div class="f"><label>علائم بیماری</label><div class="dd" id="d1"></div></div>
+<div class="row"><div class="f"><label>دمای بدن (°C)</label><input id="temp" type="number" step="0.1" inputmode="decimal" oninput="render()"></div>
+<div class="f"><label>وزن (kg)</label><input id="wt" type="number" inputmode="decimal" oninput="render()"></div></div>
+<div class="f"><label>علائم حیاتی ظاهری</label><div class="dd" id="d2"></div></div>
+<div class="f"><label>فشار خون (mmHg)</label><div class="row" style="margin:0"><input id="sys" type="number" inputmode="numeric" placeholder="سیستولیک" oninput="render()"><input id="dia" type="number" inputmode="numeric" placeholder="دیاستولیک" oninput="render()"></div></div>
+<div class="row"><div class="f"><label>سطح اکسیژن (SpO₂ %)</label><input id="spo2" type="number" inputmode="numeric" oninput="render()"></div>
+<div class="f"><label>مدت شروع بیماری</label><div class="row" style="margin:0;grid-template-columns:1fr 1fr"><input id="dur" type="number" inputmode="numeric" oninput="render()"><select id="du" onchange="render()"><option>ساعت</option><option selected>روز</option><option>هفته</option><option>ماه</option><option>سال</option></select></div></div></div>
+<div class="f"><label>مشکل یا توضیح دیگر</label><textarea id="note" rows="3" placeholder="هر مشکل دیگری که در فیلدهای بالا نیست را اینجا بنویسید" oninput="render()"></textarea></div>
+</div>
+<div class="card"><h3>خلاصه وضعیت بیمار</h3><div id="sum"></div><button class="b" id="dxb" onclick="dx()">تشخیص احتمالی</button></div>
+</section>
+<section id="rxp" class="pg" hidden><div id="rx" class="sheet"></div>
+<div class="r3 noprint"><button class="b" onclick="print()">🖨 چاپ نسخه</button><button class="b s" onclick="go('home')">ویرایش</button><button class="b s" onclick="newP()">بیمار جدید</button></div></section>
+<section id="set" class="pg" hidden>
+<div class="card"><h3>اتصال به گروک (Groq)</h3>
+<div class="f"><label>کلید API گروک (Groq)</label><input id="gkey" type="password" dir="ltr" autocomplete="off" placeholder="gsk_..."></div>
+<div class="stl" style="margin:-4px 0 12px"><span class="dot" id="dq"></span><span id="sq">—</span></div>
+<button class="b" style="margin:0" onclick="saveKey()">ثبت</button>
+<p class="emp" dir="ltr" style="text-align:center"><a href="https://console.groq.com/keys" target="_blank" style="color:var(--p)">console.groq.com/keys</a></p></div>
+<div class="card"><h3>تم برنامه</h3><div class="seg" id="th"><button type="button">☀ روز</button><button type="button">🌙 شب</button></div></div>
+<div class="card"><h3>زبان برنامه</h3><div class="seg" id="lg"><button type="button">فارسی</button><button type="button">English</button></div></div>
+<div class="card" style="text-align:center"><div class="emp">طراحی شده توسط</div><b>استاد جلالی</b></div>
+<button class="b s" onclick="go('home')">بازگشت</button>
+</section>
+</main><div id="toast"></div>
+<script>
+const $=s=>document.getElementById(s),Q=s=>document.querySelectorAll(s);
+const SYM0=["تب","لرز","سرفه خشک","سرفه خلط‌دار","گلودرد","آبریزش بینی","گرفتگی بینی","عطسه","تنگی نفس","خس‌خس سینه","درد قفسه سینه","تپش قلب","سردرد","میگرن","سرگیجه","غش","تاری دید","درد چشم","قرمزی چشم","گوش‌درد","وزوز گوش","کم‌شنوایی","درد دندان","درد هنگام بلع","تهوع","استفراغ","اسهال","یبوست","درد شکم","نفخ","سوزش سر دل","بی‌اشتهایی","خون در مدفوع","سوزش ادرار","تکرر ادرار","خون در ادرار","درد پهلو","درد کمر","درد گردن","درد مفاصل","درد عضلانی","گرفتگی عضلات","تورم مفاصل","ضعف و خستگی","کاهش وزن","افزایش وزن","تعریق شبانه","تشنگی زیاد","بی‌خوابی","اضطراب","غمگینی و بی‌انگیزگی","گزگز و بی‌حسی","لرزش دست","تشنج","خارش پوست","بثورات پوستی","زخم پوستی","ریزش مو","تورم غدد لنفاوی","تورم پا","خونریزی بینی","ترشح چشم","درد هنگام ادرار","اختلال قاعدگی","درد قفسه هنگام تنفس","سرفه خونی","تنگی نفس شبانه","گرفتگی صدا","درد ناحیه ران","احساس سنگینی سر","تنگی نفس هنگام فعالیت","سرفه شبانه","سرفه طولانی‌مدت","از دست دادن بویایی","از دست دادن چشایی","خشکی گلو","درد سینوس","خروپف","ضربان نامنظم","درد قفسه سینه هنگام فعالیت","درد ساق پا","سیاهی رفتن چشم","سردرد شدید ناگهانی","ضعف یک طرف بدن","اختلال گفتار","فراموشی","سرگیجه چرخشی","اختلال تعادل","درد عصبی سوزشی","فلج صورت","دوبینی","حساسیت به نور","خشکی چشم","خارش چشم","ورم پلک","افت ناگهانی بینایی","ترشح گوش","گرفتگی گوش","زخم دهان","خشکی دهان","بوی بد دهان","خونریزی لثه","درد فک","ترش کردن معده","آروغ زیاد","سنگینی معده","مدفوع سیاه","مدفوع چرب","درد شکم سمت راست بالا","مشکل در بلع","خونریزی مقعد","درد یا خارش مقعد","درد کیسه بیضه","ترشح مجرا","مشکل در شروع ادرار","بی‌اختیاری ادرار","ادرار کدر","تکرر ادرار شبانه","ترشح واژینال","خارش ناحیه تناسلی","درد لگن","قاعدگی دردناک","خونریزی غیرطبیعی رحم","تأخیر قاعدگی","درد یا توده پستان","ناتوانی جنسی","درد زانو","درد شانه","درد مچ دست","درد پاشنه پا","درد کمر انتشاری به پا","خشکی مفاصل","کوفتگی و کبودی بعد از ضربه","گرفتگی گردن","کهیر","تاول","زگیل","تغییر در خال پوست","خشکی و پوسته‌ریزی پوست","آکنه","شوره سر","نیش یا گزش حشره","سوختگی","ناخن شکننده","گرگرفتگی","تعریق زیاد","سردی دست و پا","خواب‌آلودگی زیاد","ضعف عمومی","پرادراری","وسواس فکری","حمله وحشت","تحریک‌پذیری","اختلال تمرکز","کابوس شبانه","کاهش اشتها","اشتهای زیاد","خشکی بینی","تورم گردن","احساس خفگی","تنگی نفس هنگام خوابیدن"];
+const VIT=["رنگ‌پریدگی","زردی پوست و چشم","کبودی لب‌ها","تعریق شدید","پوست خشک و داغ","پوست سرد و مرطوب","تنفس سریع","تنفس صدادار","نبض تند","نبض کند","بی‌قراری","خواب‌آلودگی","گیجی","کاهش سطح هوشیاری","لرزش بدن","تورم صورت","تورم پاها","بثورات پوستی","لب‌های خشک","گودافتادگی چشم","سردی اندام‌ها","قرمزی گلو","اتساع شکم","لنگیدن","انگشتان چماقی","ناخن‌های کبود","تورم اطراف چشم","ورید گردن برجسته","لکه‌های ریز خونی زیر پوست","کبودی بدون علت","زخم باز","خونریزی فعال","تورم یک‌طرفه ساق پا","غدد لنفاوی متورم","راه رفتن نامتعادل","گفتار نامفهوم","کجی صورت","مردمک‌های نامساوی","استفراغ مکرر","خشکی زبان و دهان","عرق سرد","بوی غیرعادی تنفس","تنفس با کمک عضلات گردن","فرورفتگی بین دنده‌ها","بال‌بال زدن بینی","رنگ‌پریدگی داخل پلک","زردی کف دست","کاهش ارتجاعیت پوست","زخم چرکی","توده قابل لمس","قرمزی پوست","تورم دست‌ها","ناتوانی در ایستادن","سوختگی پوست","تنفس بسیار کند","ترشح چرکی چشم","زبان لکه‌دار"];
+const SE=["Fever","Chills","Dry cough","Productive cough","Sore throat","Runny nose","Nasal congestion","Sneezing","Shortness of breath","Wheezing","Chest pain","Palpitations","Headache","Migraine","Dizziness","Fainting","Blurred vision","Eye pain","Red eye","Earache","Tinnitus","Hearing loss","Toothache","Painful swallowing","Nausea","Vomiting","Diarrhea","Constipation","Abdominal pain","Bloating","Heartburn","Loss of appetite","Blood in stool","Burning urination","Frequent urination","Blood in urine","Flank pain","Back pain","Neck pain","Joint pain","Muscle pain","Muscle cramps","Joint swelling","Weakness and fatigue","Weight loss","Weight gain","Night sweats","Excessive thirst","Insomnia","Anxiety","Low mood and loss of motivation","Tingling and numbness","Hand tremor","Seizure","Itchy skin","Skin rash","Skin ulcer","Hair loss","Swollen lymph nodes","Leg swelling","Nosebleed","Eye discharge","Painful urination","Menstrual irregularity","Chest pain on breathing","Coughing up blood","Night-time breathlessness","Hoarseness","Thigh pain","Heaviness in head",
+"Breathlessness on exertion","Night cough","Chronic cough","Loss of smell","Loss of taste","Dry throat","Sinus pain","Snoring","Irregular heartbeat","Chest pain on exertion","Calf pain","Vision blackouts","Sudden severe headache","One-sided weakness","Speech difficulty","Memory loss","Vertigo","Balance problems","Burning nerve pain","Facial paralysis","Double vision","Light sensitivity","Dry eyes","Itchy eyes","Eyelid swelling","Sudden vision loss","Ear discharge","Ear fullness","Mouth ulcers","Dry mouth","Bad breath","Gum bleeding","Jaw pain","Acid reflux","Excessive belching","Stomach heaviness","Black stool","Greasy stool","Upper right abdominal pain","Difficulty swallowing","Rectal bleeding","Anal pain or itching","Testicular pain","Urethral discharge","Difficulty starting urination","Urinary incontinence","Cloudy urine","Night-time urination","Vaginal discharge","Genital itching","Pelvic pain","Painful periods","Abnormal uterine bleeding","Delayed period","Breast pain or lump","Erectile dysfunction","Knee pain","Shoulder pain","Wrist pain","Heel pain","Back pain radiating to leg","Joint stiffness","Bruising after injury","Neck stiffness","Hives","Blisters","Warts","Mole changes","Dry flaky skin","Acne","Dandruff","Insect bite or sting","Burn","Brittle nails","Hot flashes","Excessive sweating","Cold hands and feet","Excessive sleepiness","General weakness","Excessive urination","Obsessive thoughts","Panic attack","Irritability","Poor concentration","Nightmares","Decreased appetite","Increased appetite","Dry nose","Neck swelling","Choking sensation","Breathlessness when lying down"];
+const VE=["Pallor","Jaundice (yellow skin and eyes)","Bluish lips","Profuse sweating","Hot dry skin","Cold clammy skin","Rapid breathing","Noisy breathing","Fast pulse","Slow pulse","Restlessness","Drowsiness","Confusion","Reduced consciousness","Body tremor","Facial swelling","Leg swelling","Skin rash","Dry lips","Sunken eyes","Cold extremities","Red throat","Abdominal distension","Limping","Finger clubbing","Bluish nails","Swelling around eyes","Prominent neck veins","Tiny blood spots under skin","Unexplained bruising","Open wound","Active bleeding","One-sided calf swelling","Swollen lymph nodes","Unsteady gait","Slurred speech","Facial droop","Unequal pupils","Repeated vomiting","Dry tongue and mouth","Cold sweat","Abnormal breath odor","Neck muscle use in breathing","Rib retractions","Nasal flaring","Pale inner eyelids","Yellow palms","Reduced skin elasticity","Pus-filled wound","Palpable mass","Red skin","Swollen hands","Unable to stand","Skin burn","Very slow breathing","Purulent eye discharge","Coated tongue"];
+//END_ARR
+const UI={'نام بیمار':'Patient name','سن (سال)':'Age (years)','جنسیت':'Gender','مرد':'Male','زن':'Female','علائم بیماری':'Disease symptoms','دمای بدن (°C)':'Body temperature (°C)','وزن (kg)':'Weight (kg)','علائم حیاتی ظاهری':'Visible vital signs','فشار خون (mmHg)':'Blood pressure (mmHg)','سیستولیک':'Systolic','دیاستولیک':'Diastolic','سطح اکسیژن (SpO₂ %)':'Oxygen level (SpO₂ %)','مدت شروع بیماری':'Illness duration','ساعت':'Hours','روز':'Days','هفته':'Weeks','ماه':'Months','سال':'Years','مشکل یا توضیح دیگر':'Other problem or notes','هر مشکل دیگری که در فیلدهای بالا نیست را اینجا بنویسید':'Write any other problem not covered above','خلاصه وضعیت بیمار':'Patient status summary','تشخیص احتمالی':'Probable diagnosis','هنوز موردی ثبت نشده است.':'Nothing recorded yet.','🖨 چاپ نسخه':'🖨 Print prescription','ویرایش':'Edit','بیمار جدید':'New patient','اتصال به گروک (Groq)':'Groq connection','کلید API گروک (Groq)':'Groq API key','ثبت':'Save','تم برنامه':'Theme','☀ روز':'☀ Light','🌙 شب':'🌙 Dark','زبان برنامه':'App language','طراحی شده توسط':'Designed by','استاد جلالی':'Ostad Jalali','بازگشت':'Back','کلید ثبت نشده':'No key saved','بدون اینترنت':'Offline','در حال بررسی...':'Checking...','متصل':'Connected','کلید نامعتبر است':'Invalid key','عدم اتصال به سرور':'Cannot reach server','ثبت شد':'Saved','حداقل یک علامت یا دمای بدن را ثبت کنید':'Enter at least one symptom or the body temperature','ابتدا کلید API گروک را در تنظیمات ثبت کنید':'Save your Groq API key in Settings first','در حال تحلیل...':'Analyzing...','خطا: ':'Error: ','پاسخی دریافت نشد':'No response received',' — دوباره تلاش کنید':' — please try again','انتخاب کنید ▾':'Select ▾','جستجو...':'Search...','موردی نیست':'No items','علامت':'Symptom','علامت ظاهری':'Visible sign','توضیحات':'Notes','دمای بدن':'Body temperature','فشار خون':'Blood pressure','اکسیژن خون':'Blood oxygen','وزن':'Weight','سن':'Age','مدت بیماری':'Illness duration','بیمار':'Patient','تشخیص':'Diagnosis','استراحت':'Rest','رژیم غذایی':'Diet','هشدار':'Warning','تشخیص‌های افتراقی':'Differential diagnoses','آزمایش و تصویربرداری پیشنهادی':'Suggested tests and imaging','دکتر من':'My Doctor'};
+SYM0.forEach((x,i)=>UI[x]=SE[i]);VIT.forEach((x,i)=>UI[x]=VE[i]);
+let LG='fa';
+const T=x=>LG=='en'&&UI[x]||x;
+const S={sym:[],vit:[],sex:''},FILL=[],SYM=[...new Set(SYM0)];
+const ls={g:k=>{try{return localStorage.getItem(k)||''}catch(e){return''}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+LG=ls.g('lang')||'fa';
+const h=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(t,ms=1000){const e=$('toast');e.textContent=t;e.className='show';clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',ms)}
+function go(id){Q('.pg').forEach(p=>p.hidden=p.id!=id);scrollTo(0,0)}
+function dd(id,list,key){const e=$(id);e.innerHTML='<button type="button" class="ddb"></button><div class="ddp" hidden><input><div class="ddl"></div></div>';
+const b=e.children[0],p=e.children[1],q=p.children[0],l=p.children[1];
+const fill=()=>{b.textContent=T('انتخاب کنید ▾');q.placeholder=T('جستجو...');const s=q.value.trim().toLowerCase();
+l.innerHTML=list.filter(x=>!S[key].includes(x)&&T(x).toLowerCase().includes(s)).sort((a,c)=>T(a).localeCompare(T(c),LG)).map(x=>'<div class="it" data-v="'+x+'">'+T(x)+'</div>').join('')||'<div class="it">'+T('موردی نیست')+'</div>'};
+b.onclick=()=>{Q('.ddp').forEach(o=>o!==p&&(o.hidden=true));p.hidden=!p.hidden;fill()};
+q.oninput=fill;
+l.onclick=ev=>{const x=ev.target.dataset.v;if(x){S[key].push(x);q.value='';render()}};
+FILL.push(fill)}
+document.addEventListener('click',ev=>Q('.dd').forEach(d=>d.contains(ev.target)||(d.children[1].hidden=true)));
+function rows(){const v=i=>$(i).value.trim(),r=[],p=(k,l,x)=>r.push([k,l,x]),u=x=>T(x).toLowerCase();
+v('name')&&p('name','نام بیمار',v('name'));
+v('age')&&p('age','سن',v('age')+' '+u('سال'));
+S.sex&&p('sex','جنسیت',T(S.sex));
+v('temp')&&p('temp','دمای بدن',v('temp')+' °C');
+(v('sys')||v('dia'))&&p('bp','فشار خون',(v('sys')||'?')+'/'+(v('dia')||'?')+' mmHg');
+v('spo2')&&p('spo2','اکسیژن خون',v('spo2')+'%');
+v('wt')&&p('wt','وزن',v('wt')+' kg');
+v('dur')&&p('dur','مدت بیماری',v('dur')+' '+u($('du').value));
+S.sym.forEach((x,i)=>p('sym:'+i,'علامت',T(x)));
+S.vit.forEach((x,i)=>p('vit:'+i,'علامت ظاهری',T(x)));
+v('note')&&p('note','توضیحات',v('note'));
+return r}
+function render(){const r=rows();
+$('sum').innerHTML=r.length?r.map(x=>'<div class="sr"><span><b>'+T(x[1])+':</b> '+h(x[2])+'</span><button onclick="rm(\''+x[0]+'\')">−</button></div>').join(''):'<div class="emp">'+T('هنوز موردی ثبت نشده است.')+'</div>';
+FILL.forEach(f=>f())}
+function rm(k){const[a,i]=k.split(':');
+if(a=='sym'||a=='vit')S[a].splice(+i,1);else if(a=='sex'){S.sex='';sexUI()}else if(a=='bp')$('sys').value=$('dia').value='';else $(a).value='';render()}
+function sexUI(){Q('#sex button').forEach(b=>b.classList.toggle('on',b.dataset.f==S.sex))}
+Q('#sex button').forEach(b=>b.onclick=()=>{S.sex=S.sex==b.dataset.f?'':b.dataset.f;sexUI();render()});
+function newP(){Q('#home input,#home textarea').forEach(i=>i.value='');Q('.ddp').forEach(p=>p.hidden=true);$('du').value='روز';S.sym=[];S.vit=[];S.sex='';sexUI();render();go('home')}
+function theme(d){document.body.classList.toggle('dark',d);Q('#th button').forEach((b,i)=>b.classList.toggle('on',!!i==d));ls.s('dark',d?'1':'')}
+Q('#th button').forEach((b,i)=>b.onclick=()=>theme(!!i));
+function lang(l){LG=l;ls.s('lang',l);const E=l=='en';
+document.documentElement.lang=l;document.documentElement.dir=E?'ltr':'rtl';
+Q('label,h3,option,.b,#sex button,#th button,.card>.emp,.card>b').forEach(e=>{if(e.children.length)return;e.dataset.f=e.dataset.f||e.textContent;e.textContent=T(e.dataset.f);if(e.tagName=='OPTION')e.value=e.dataset.f});
+Q('#sys,#dia,#note').forEach(e=>{e.dataset.f=e.dataset.f||e.placeholder;e.placeholder=T(e.dataset.f)});
+$('ttl').innerHTML=E?'🩺 MyDoc <small>My Doctor</small>':'🩺 دکتر من <small>MyDoc</small>';
+Q('#lg button').forEach((b,i)=>b.classList.toggle('on',!!i==E));
+sexUI();render();chk()}
+Q('#lg button').forEach((b,i)=>b.onclick=()=>lang(i?'en':'fa'));
+function saveKey(){ls.s('gkey',$('gkey').value.trim());toast(T('ثبت شد'));chk()}
+function sett(c,x){$('dq').className='dot '+c;$('sq').textContent=T(x);$('hd').className='dot '+c}
+async function chk(){const k=ls.g('gkey');if(!k)return sett('','کلید ثبت نشده');if(!navigator.onLine)return sett('bad','بدون اینترنت');sett('wait','در حال بررسی...');
+try{const c=new AbortController(),m=setTimeout(()=>c.abort(),8000);const r=await fetch('https://api.groq.com/openai/v1/models',{headers:{Authorization:'Bearer '+k},signal:c.signal});clearTimeout(m);sett(r.ok?'ok':'bad',r.ok?'متصل':'کلید نامعتبر است')}catch(e){sett('bad','عدم اتصال به سرور')}}
+setInterval(chk,15000);addEventListener('online',chk);addEventListener('offline',chk);
+async function ai(p){const k=ls.g('gkey');let err;
+for(const m of['openai/gpt-oss-120b','openai/gpt-oss-20b']){const c=new AbortController(),tm=setTimeout(()=>c.abort(),60000);
+try{const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+k},body:JSON.stringify({model:m,messages:[{role:'user',content:p}],response_format:{type:'json_object'},reasoning_effort:'medium',temperature:.3}),signal:c.signal});
+const j=await r.json();if(!r.ok)throw new Error(j.error&&j.error.message||r.status);return JSON.parse(j.choices[0].message.content.replace(/```json|```/g,'').trim())}catch(e){err=e}finally{clearTimeout(tm)}}
+throw err}
+async function dx(){const r=rows();if(!S.sym.length&&!S.vit.length&&!$('temp').value.trim()&&!$('note').value.trim())return toast(T('حداقل یک علامت یا دمای بدن را ثبت کنید'),2500);
+if(!ls.g('gkey')){toast(T('ابتدا کلید API گروک را در تنظیمات ثبت کنید'),2500);return go('set')}
+const b=$('dxb');b.disabled=true;b.textContent=T('در حال تحلیل...');
+try{show(await ai('You are an experienced general practitioner. Patient summary:\n'+r.map(x=>T(x[1])+': '+x[2]).join('\n')+'\n\nGive the most probable diagnosis with short reasoning, 2 to 4 differential diagnoses, laboratory tests and imaging (X-ray, ultrasound, CT, ECG, etc.) the patient should have if needed with the reason for each, medications with dose adjusted to age and weight and how to take them, rest advice, a suitable diet, and red-flag warnings that need urgent care. Return ONLY JSON: {"dx_fa":"","dx_en":"","why":"","ddx":[{"n":"","why":""}],"tests":[{"n":"","why":""}],"drugs":[{"fa":"","en":"","dose":"","how":""}],"rest":"","diet":"","warn":""}. Write all descriptive text in '+(LG=='en'?'English':'Persian')+'; give drug names in both Persian (fa) and English (en). Use empty arrays when nothing is needed.'))}
+catch(e){toast(T('خطا: ')+(e.name=='AbortError'?T('پاسخی دریافت نشد'):e.message)+T(' — دوباره تلاش کنید'),4000)}
+b.disabled=false;b.textContent=T('تشخیص احتمالی')}
+function show(d){const n=$('name').value.trim(),E=LG=='en',L=(a,t)=>a&&a.length?'<div><b>'+T(t)+':</b></div>'+a.map(x=>'<div class="ind">• <b>'+h(x.n)+'</b>'+(x.why?' — '+h(x.why):'')+'</div>').join(''):'';
+$('rx').innerHTML='<div class="rh"><b>'+T('دکتر من')+' · MyDoc</b><span>'+new Date().toLocaleDateString(E?'en-US':'fa-IR')+'</span></div>'
++'<div>'+T('بیمار')+': <b>'+(h(n)||'—')+'</b> | '+T('سن')+': '+(h($('age').value)||'—')+' | '+h(T(S.sex))+' | '+T('وزن')+': '+(h($('wt').value)||'—')+'</div>'
++'<div>'+T('تشخیص')+': <b>'+h(E?d.dx_en:d.dx_fa)+'</b> <i dir="auto">('+h(E?d.dx_fa:d.dx_en)+')</i></div><div>'+h(d.why)+'</div>'
++L(d.ddx,'تشخیص‌های افتراقی')+L(d.tests,'آزمایش و تصویربرداری پیشنهادی')+'<div class="rx">℞</div>'
++(d.drugs||[]).map((x,i)=>'<div>'+(i+1)+'. <b>'+h(x.fa)+'</b> — <span dir="ltr">'+h(x.en)+'</span></div><div class="ind">'+h(x.dose)+' | '+h(x.how)+'</div>').join('')
++'<div><b>'+T('استراحت')+':</b> '+h(d.rest)+'</div><div><b>'+T('رژیم غذایی')+':</b> '+h(d.diet)+'</div><div><b>'+T('هشدار')+':</b> '+h(d.warn)+'</div>';go('rxp')}
+dd('d1',SYM,'sym');dd('d2',VIT,'vit');$('gkey').value=ls.g('gkey');theme(!!ls.g('dark'));lang(LG);
+</script></body></html>
